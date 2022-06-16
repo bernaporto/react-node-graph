@@ -1,0 +1,9 @@
+.menu-container {
+  max-width: 320px;
+  padding: 2rem;
+}
+
+.menu-dropdown {
+  background-color: white;
+  cursor: pointer;
+}
