@@ -1,4 +1,4 @@
-const { resolve } = require('path')
+const { resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -7,11 +7,9 @@ module.exports = {
   devServer: {
     hot: true,
     historyApiFallback: true,
-  }, 
+  },
 
-  entry: [
-    './src/index.tsx',
-  ],
+  entry: ['./src/index.tsx'],
 
   output: {
     path: resolve('./dist'),
@@ -25,18 +23,24 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
         test: /\.(ts|tsx)?$/,
         loader: 'esbuild-loader',
         options: {
           loader: 'tsx',
           target: 'es2015',
           tsconfigRaw: require('./tsconfig.json'),
-        }
+        },
       },
     ],
   },
 
   plugins: [
-    new HtmlWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: resolve('./src/index.html'),
+    }),
   ],
 };
