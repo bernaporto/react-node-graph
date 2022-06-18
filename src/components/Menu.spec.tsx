@@ -6,9 +6,18 @@ import { IMenuProps, Menu } from './Menu';
 const noop = () => {
   /* noop */
 };
-const testOptions = ['optionA', 'optionB'];
+const testOptions = [
+  {
+    type: 'optionA',
+    label: 'Option A',
+  },
+  {
+    type: 'optionB',
+    label: 'Option B',
+  },
+];
 
-const menuTestProps: IMenuProps = {
+const menuTestProps: IMenuProps<string> = {
   onSelectOption: noop,
   options: testOptions,
   title: 'Test Title',
@@ -31,7 +40,7 @@ describe('Menu', () => {
     const spyFn = jest.fn();
     const menu = render(<Menu {...menuTestProps} onSelectOption={spyFn} />);
 
-    const testOption = testOptions[0];
+    const testOption = testOptions[0].type;
     const dropdown = menu.getByTestId('menu-dropdown');
 
     await userEvent.selectOptions(dropdown, testOption);

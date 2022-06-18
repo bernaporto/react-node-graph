@@ -1,19 +1,24 @@
 import './Menu.css';
-import React, { ChangeEventHandler, FC } from 'react';
+import React, { ChangeEventHandler } from 'react';
 
-export interface IMenuProps {
-  onSelectOption: (option: string) => void;
-  options: string[];
+export interface IOptionDescriptor<T extends string> {
+  type: T;
+  label: string;
+}
+
+export interface IMenuProps<T extends string> {
+  onSelectOption: (option: T) => void;
+  options: IOptionDescriptor<T>[];
   title: string;
 }
 
-export const Menu: FC<IMenuProps> = (props) => {
+export function Menu<T extends string>(props: IMenuProps<T>) {
   const { onSelectOption, options, title } = props;
 
   const handleOnChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
     event.preventDefault();
 
-    onSelectOption(event.target.value);
+    onSelectOption(event.target.value as T);
   };
 
   return (
@@ -30,12 +35,12 @@ export const Menu: FC<IMenuProps> = (props) => {
         </option>
 
         {/* Menu options */}
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
+        {options.map(({ type, label }) => (
+          <option key={type} value={type}>
+            {label}
           </option>
         ))}
       </select>
     </section>
   );
-};
+}
