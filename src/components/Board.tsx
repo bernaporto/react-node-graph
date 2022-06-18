@@ -4,20 +4,28 @@ import { useNodes } from '../store';
 import { Node } from './Node';
 
 export const Board: FC = () => {
-  const { nodes } = useNodes();
+  const { nodes, removeNode } = useNodes();
 
   return (
     <section className="board" data-testid="board-root">
+      <div>
+        {nodes.map(({ id, title }) => (
+          <Node
+            key={id}
+            id={id}
+            title={title}
+            removeNode={() => removeNode(id)}
+          />
+        ))}
+      </div>
+
       <BoardGrid />
-      {nodes.map(({ id, title }) => (
-        <Node key={id} id={id} title={title} />
-      ))}
     </section>
   );
 };
 
 const BoardGrid: FC = () => (
-  <svg width="100%" height="100%">
+  <svg className="board-bg">
     <pattern
       id="grid-fill"
       width="40"

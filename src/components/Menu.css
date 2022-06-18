@@ -1,5 +1,6 @@
 .menu-container {
-  max-width: 320px;
+  position: absolute;
+  min-width: 320px;
   padding: 2rem;
 }
 

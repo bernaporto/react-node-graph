@@ -62,6 +62,7 @@ describe('useNode', () => {
     const btnRemove = testComponent.queryByTestId(TEST_REMOVE_BUTTON_ID);
     expect(btnRemove).toBeTruthy();
 
+    //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     await userEvent.click(btnRemove!);
 
     expect(testComponent.queryAllByTestId(TEST_NODE_ID).length).toBe(0);
