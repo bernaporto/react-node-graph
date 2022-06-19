@@ -1,11 +1,59 @@
-.menu-container {
+.menu-root {
+  user-select: none;
+
   position: absolute;
-  min-width: 320px;
-  padding: 2rem;
+  min-width: 22rem;
+  padding: 1rem;
+  margin-left: 1rem;
+  margin-top: 1rem;
   z-index: 1000;
+
+  border: 0.1rem solid lightgray;
+  border-radius: 0.3rem;
+  background-color: white;
 }
 
-.menu-dropdown {
-  background-color: white;
+.menu-title {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.menu-option {
+  display: flex;
+  align-items: center;
+  
+  width: 100%;
+  padding: 0.8rem 1.2rem;
   cursor: pointer;
+
+  background-color: white;
+  transition: 400ms;
+}
+
+.menu-option > * {
+  padding: 0;
+  margin: 0;
+}
+
+.menu-option > :first-child {
+  flex-grow: 1;
+}
+
+.menu-option:hover {
+  color: #9b4dca;
+  background-color: #f9f9f9;
+}
+
+.menu-option.disabled {
+  cursor: inherit;
+  opacity: 0.5;
+}
+
+.menu-option.disabled:hover {
+  color: inherit;
+  background-color: inherit;
+}
+
+.menu-option-label {
+  text-transform: capitalize;
 }

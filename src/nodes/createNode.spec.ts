@@ -1,5 +1,6 @@
 import { isNode } from 'react-flow-renderer';
-import { createNode, nodeType } from './createNode';
+import { createNode } from './createNode';
+import { nodeType } from './types';
 
 describe('createNode', () => {
   it('should return a Node', () => {

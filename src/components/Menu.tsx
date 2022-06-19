@@ -1,38 +1,43 @@
 import './Menu.css';
-import React, { ChangeEventHandler } from 'react';
-import { capitalize } from '../tools';
+import React, { FC, MouseEventHandler } from 'react';
+import { INodeMenuButtonConfig, nodeConfig } from '../nodes';
 import { useNodes } from '../hooks';
-import { nodeType, TNodeType } from '../nodes';
 
-export function Menu() {
-  const { addNode } = useNodes();
+export const Menu: FC = () => (
+  <section className="menu-root" data-testid="menu-root">
+    <p className="menu-title">Add Node</p>
 
-  const handleOnChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
-    event.preventDefault();
+    {Object.values(nodeConfig).map((buttonConfig, index) => (
+      <MenuButton key={`${buttonConfig.nodeType}_${index}`} {...buttonConfig} />
+    ))}
+  </section>
+);
 
-    addNode(event.target.value as TNodeType);
+function MenuButton(props: INodeMenuButtonConfig) {
+  const { label, nodeType: type, max } = props;
+  const { addNode, nodes } = useNodes();
+
+  const isDisabled = max
+    ? nodes.filter(({ data: { nodeType } }) => nodeType === type).length >= max
+    : false;
+
+  const handleClick: MouseEventHandler<HTMLDivElement> = (evt) => {
+    if (isDisabled) return;
+
+    evt.preventDefault();
+    addNode(type);
   };
 
-  return (
-    <section className="menu-container" data-testid="menu-root">
-      <select
-        className="menu-dropdown"
-        data-testid="menu-dropdown"
-        value="title"
-        onChange={handleOnChange}
-      >
-        {/* Menu title */}
-        <option value="title" disabled>
-          Add Node
-        </option>
+  const classes = ['menu-option', isDisabled ? 'disabled' : ''].join(' ');
 
-        {/* Menu options */}
-        {nodeType.map((type) => (
-          <option key={type} value={type} className="menu-dropdown-option">
-            {capitalize(type)}
-          </option>
-        ))}
-      </select>
-    </section>
+  return (
+    <div
+      className={classes}
+      onClick={handleClick}
+      data-testid={`menu-button-${type}`}
+    >
+      <p className="menu-option-label">{label}</p>
+      <p>&#x2B;</p>
+    </div>
   );
 }

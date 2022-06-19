@@ -1,29 +1,22 @@
 import { Node } from 'react-flow-renderer';
 import { v4 as uuidV4 } from 'uuid';
-import { capitalize } from '../tools';
+import { nodeConfig } from './constants';
+import { TNodeType } from './types';
 
-export const nodeType = ['query', 'reader', 'retriever'] as const;
-export type TNodeType = typeof nodeType[number];
-
-type TNodeFactory = () => Node;
-
-const nodeFactoryMap: Record<TNodeType, TNodeFactory> = {
-  query: () => doCreateNode('query', 'input'),
-  reader: () => doCreateNode('reader', 'output'),
-  retriever: () => doCreateNode('retriever'),
+export const createNode = (nodeType: TNodeType): Node => {
+  const { label, ioType } = nodeConfig[nodeType];
+  return doCreateNode(nodeType, label, ioType);
 };
-
-export const createNode = (nodeType: TNodeType): Node =>
-  nodeFactoryMap[nodeType]();
 
 function doCreateNode(
   nodeType: TNodeType,
-  type: 'default' | 'input' | 'output' = 'default'
+  label: string,
+  ioType: 'default' | 'input' | 'output'
 ): Node {
   return {
-    type,
+    type: ioType,
     id: uuidV4(),
-    data: { label: capitalize(nodeType), nodeType },
+    data: { label, nodeType },
     position: {
       x: window.innerWidth / 2,
       y: window.innerHeight / 2,
