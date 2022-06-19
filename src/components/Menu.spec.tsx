@@ -5,7 +5,7 @@ import { Menu } from './Menu';
 import { TNodeType } from '../nodes';
 
 const addNodeMock = jest.fn();
-jest.mock('../store', () => {
+jest.mock('../hooks', () => {
   const useNodes = () => ({
     nodes: [],
     addNode: addNodeMock,
@@ -15,7 +15,7 @@ jest.mock('../store', () => {
   });
 
   return {
-    ...jest.requireActual('../store'),
+    ...jest.requireActual('../hooks'),
     useNodes,
   };
 });
@@ -31,19 +31,13 @@ describe('Menu', () => {
     expect(menu.queryByTestId('menu-root')).toBeTruthy();
   });
 
-  it('should include a dropdown menu element', () => {
-    const menu = render(<Menu />);
-
-    expect(menu.queryByTestId('menu-dropdown')).toBeTruthy();
-  });
-
-  it('should call `addNode` once an option is selected', async () => {
+  it('should call `addNode` once an option is clicked', async () => {
     const menu = render(<Menu />);
 
     const testOption: TNodeType = 'query';
-    const dropdown = menu.getByTestId('menu-dropdown');
+    const button = menu.getByTestId(`menu-button-${testOption}`);
 
-    await userEvent.selectOptions(dropdown, testOption);
+    await userEvent.click(button);
 
     expect(addNodeMock).toBeCalledTimes(1);
     expect(addNodeMock).toBeCalledWith(testOption);

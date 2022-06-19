@@ -15,15 +15,6 @@ describe('useNode', () => {
     expect(result.current.nodes.length).toBe(1);
   });
 
-  it('should add a `query` node only once', () => {
-    const { result } = renderHook(() => useNodes(), { wrapper });
-
-    act(() => result.current.addNode('query'));
-    act(() => result.current.addNode('query'));
-
-    expect(result.current.nodes.length).toBe(1);
-  });
-
   it('should update a node with onNodesChange', () => {
     const { result } = renderHook(() => useNodes(), { wrapper });
 

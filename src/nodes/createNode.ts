@@ -1,7 +1,7 @@
 import { Node } from 'react-flow-renderer';
 import { v4 as uuidV4 } from 'uuid';
 import { nodeConfig } from './constants';
-import { TNodeType } from './types';
+import { TNodeIOType, TNodeType } from './types';
 
 export const createNode = (nodeType: TNodeType): Node => {
   const { label, ioType } = nodeConfig[nodeType];
@@ -11,7 +11,7 @@ export const createNode = (nodeType: TNodeType): Node => {
 function doCreateNode(
   nodeType: TNodeType,
   label: string,
-  ioType: 'default' | 'input' | 'output'
+  ioType: TNodeIOType
 ): Node {
   return {
     type: ioType,

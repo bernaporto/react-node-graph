@@ -24,16 +24,7 @@ export function NodeProvider(props: PropsWithChildren) {
       value={{
         nodes,
         onNodesChange,
-        addNode: (type: TNodeType) => {
-          if (
-            type === 'query' &&
-            nodes.find((node) => node.data.nodeType === 'query')
-          ) {
-            return;
-          }
-
-          setNodes([...nodes, createNode(type)]);
-        },
+        addNode: (type: TNodeType) => setNodes([...nodes, createNode(type)]),
       }}
     >
       {props.children}
