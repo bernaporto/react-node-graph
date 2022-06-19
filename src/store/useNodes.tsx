@@ -1,63 +1,39 @@
-import React, {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from 'react';
-import { INodeDescriptor, nodeFactories, TNodeId } from '../nodes';
-import { TNodeStoreState, TNodeContext, TNodeStoreAction } from './types';
-
-function nodeReducer(
-  state: TNodeStoreState,
-  action: TNodeStoreAction
-): TNodeStoreState {
-  switch (action.type) {
-    case 'add-node': {
-      const createNode = nodeFactories[action.payload];
-
-      return [...state, createNode()];
-    }
-
-    case 'remove-node':
-      return state.filter((node) => node.id !== action.payload);
-
-    case 'update-node': {
-      const { data, id } = action.payload;
-      const current = state.find((node) => node.id === id);
-
-      if (!current) return state;
-
-      return [
-        ...state.filter((node) => node.id !== id),
-        { ...current, ...data },
-      ];
-    }
-  }
-}
+import React, { createContext, PropsWithChildren, useContext } from 'react';
+import { Node, OnNodesChange, useNodesState } from 'react-flow-renderer';
+import { createNode, TNodeType } from '../nodes';
 
 const noop = () => {
   /* noop */
 };
 
-const NodeContext = createContext<TNodeContext>({
+const NodeContext = createContext<{
+  nodes: Node[];
+  onNodesChange: OnNodesChange;
+  addNode: (type: TNodeType) => void;
+}>({
   nodes: [],
   addNode: noop,
-  removeNode: noop,
-  updateNode: noop,
+  onNodesChange: noop,
 });
 
 export function NodeProvider(props: PropsWithChildren) {
-  const [nodes, dispatch] = useReducer(nodeReducer, []);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
 
   return (
     <NodeContext.Provider
       value={{
         nodes,
-        addNode: (payload) => dispatch({ type: 'add-node', payload }),
-        removeNode: (payload) => dispatch({ type: 'remove-node', payload }),
-        updateNode: (payload) => dispatch({ type: 'update-node', payload }),
+        onNodesChange,
+        addNode: (type: TNodeType) => {
+          if (
+            type === 'query' &&
+            nodes.find((node) => node.data.nodeType === 'query')
+          ) {
+            return;
+          }
+
+          setNodes([...nodes, createNode(type)]);
+        },
       }}
     >
       {props.children}
@@ -66,30 +42,3 @@ export function NodeProvider(props: PropsWithChildren) {
 }
 
 export const useNodes = () => useContext(NodeContext);
-
-export const useNode = (
-  targetId: TNodeId
-): {
-  node: INodeDescriptor | null;
-  update: (data: Partial<Omit<INodeDescriptor, 'id'>>) => void;
-} => {
-  const { nodes, updateNode } = useNodes();
-  const [node, setNode] = useState<INodeDescriptor | null>(null);
-
-  useEffect(() => {
-    const maybeNode = nodes.find(({ id }) => id === targetId);
-
-    if (!node && !maybeNode) return;
-    if (!maybeNode) {
-      setNode(null);
-      return;
-    }
-
-    setNode(maybeNode);
-  }, [nodes]);
-
-  return {
-    node,
-    update: (data) => updateNode({ data, id: targetId }),
-  };
-};

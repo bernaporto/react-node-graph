@@ -1,24 +1,16 @@
 import './Menu.css';
 import React, { ChangeEventHandler } from 'react';
+import { capitalize } from '../tools';
+import { useNodes } from '../store';
+import { nodeType, TNodeType } from '../nodes';
 
-export interface IOptionDescriptor<T extends string> {
-  type: T;
-  label: string;
-}
-
-export interface IMenuProps<T extends string> {
-  onSelectOption: (option: T) => void;
-  options: IOptionDescriptor<T>[];
-  title: string;
-}
-
-export function Menu<T extends string>(props: IMenuProps<T>) {
-  const { onSelectOption, options, title } = props;
+export function Menu() {
+  const { addNode } = useNodes();
 
   const handleOnChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
     event.preventDefault();
 
-    onSelectOption(event.target.value as T);
+    addNode(event.target.value as TNodeType);
   };
 
   return (
@@ -31,13 +23,13 @@ export function Menu<T extends string>(props: IMenuProps<T>) {
       >
         {/* Menu title */}
         <option value="title" disabled>
-          {title}
+          Add Node
         </option>
 
         {/* Menu options */}
-        {options.map(({ type, label }) => (
-          <option key={type} value={type}>
-            {label}
+        {nodeType.map((type) => (
+          <option key={type} value={type} className="menu-dropdown-option">
+            {capitalize(type)}
           </option>
         ))}
       </select>

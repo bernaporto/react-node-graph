@@ -1,1 +1,2 @@
-export { NodeProvider, useNodes, useNode } from './useNodes';
+export { NodeProvider, useNodes } from './useNodes';
+export { useEdges } from './useEdges';

@@ -2,6 +2,7 @@
   position: absolute;
   min-width: 320px;
   padding: 2rem;
+  z-index: 1000;
 }
 
 .menu-dropdown {

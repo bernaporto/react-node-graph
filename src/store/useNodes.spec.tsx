@@ -1,70 +1,48 @@
-import React, { FC, useEffect } from 'react';
-import { render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import React, { PropsWithChildren } from 'react';
+import { act, renderHook } from '@testing-library/react';
 import { NodeProvider, useNodes } from './useNodes';
 
-const TEST_NODE_ID = 'test-node';
-const TEST_REMOVE_BUTTON_ID = 'test-button';
-
-const TestNodesComponent: FC = () => {
-  const { nodes, removeNode } = useNodes();
-
-  const removeLastNode = () => {
-    const lastNode = nodes[nodes.length - 1];
-
-    if (!lastNode) return;
-
-    removeNode(lastNode.id);
-  };
-
-  return (
-    <div data-testid="test-nodes-root">
-      {nodes.map(({ id }) => (
-        <div key={id} data-testid={TEST_NODE_ID}></div>
-      ))}
-
-      <button data-testid={TEST_REMOVE_BUTTON_ID} onClick={removeLastNode} />
-    </div>
-  );
-};
-
-const TestAddNodeComponent: FC = () => {
-  const { addNode } = useNodes();
-
-  useEffect(() => {
-    addNode('add');
-  }, []);
-
-  return null;
-};
+const wrapper = ({ children }: PropsWithChildren) => (
+  <NodeProvider>{children}</NodeProvider>
+);
 
 describe('useNode', () => {
   it('should add a new node with `addNode`', () => {
-    const testComponent = render(
-      <NodeProvider>
-        <TestNodesComponent />
-        <TestAddNodeComponent />
-      </NodeProvider>
-    );
+    const { result } = renderHook(() => useNodes(), { wrapper });
 
-    expect(testComponent.queryAllByTestId(TEST_NODE_ID).length).toBe(1);
+    act(() => result.current.addNode('reader'));
+
+    expect(result.current.nodes.length).toBe(1);
   });
 
-  it('should remove a node with `removeNode`', async () => {
-    const testComponent = render(
-      <NodeProvider>
-        <TestNodesComponent />
-        <TestAddNodeComponent />
-      </NodeProvider>
-    );
+  it('should add a `query` node only once', () => {
+    const { result } = renderHook(() => useNodes(), { wrapper });
 
-    expect(testComponent.queryAllByTestId(TEST_NODE_ID).length).toBe(1);
-    const btnRemove = testComponent.queryByTestId(TEST_REMOVE_BUTTON_ID);
-    expect(btnRemove).toBeTruthy();
+    act(() => result.current.addNode('query'));
+    act(() => result.current.addNode('query'));
 
-    //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    await userEvent.click(btnRemove!);
+    expect(result.current.nodes.length).toBe(1);
+  });
 
-    expect(testComponent.queryAllByTestId(TEST_NODE_ID).length).toBe(0);
+  it('should update a node with onNodesChange', () => {
+    const { result } = renderHook(() => useNodes(), { wrapper });
+
+    act(() => result.current.addNode('reader'));
+
+    expect(result.current.nodes.length).toBe(1);
+    expect(result.current.nodes[0].selected).toBeFalsy();
+
+    act(() => {
+      const { id, selected } = result.current.nodes[0];
+      result.current.onNodesChange([
+        {
+          id,
+          selected: !selected,
+          type: 'select',
+        },
+      ]);
+    });
+
+    expect(result.current.nodes[0].selected).toBeTruthy();
   });
 });

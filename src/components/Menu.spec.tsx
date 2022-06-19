@@ -1,51 +1,51 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { IMenuProps, Menu } from './Menu';
+import { Menu } from './Menu';
+import { TNodeType } from '../nodes';
 
-const noop = () => {
-  /* noop */
-};
-const testOptions = [
-  {
-    type: 'optionA',
-    label: 'Option A',
-  },
-  {
-    type: 'optionB',
-    label: 'Option B',
-  },
-];
+const addNodeMock = jest.fn();
+jest.mock('../store', () => {
+  const useNodes = () => ({
+    nodes: [],
+    addNode: addNodeMock,
+    onNodesChange: () => {
+      /* noop */
+    },
+  });
 
-const menuTestProps: IMenuProps<string> = {
-  onSelectOption: noop,
-  options: testOptions,
-  title: 'Test Title',
-};
+  return {
+    ...jest.requireActual('../store'),
+    useNodes,
+  };
+});
 
 describe('Menu', () => {
+  afterEach(() => {
+    addNodeMock.mockClear();
+  });
+
   it('should render', () => {
-    const menu = render(<Menu {...menuTestProps} />);
+    const menu = render(<Menu />);
 
     expect(menu.queryByTestId('menu-root')).toBeTruthy();
   });
 
   it('should include a dropdown menu element', () => {
-    const menu = render(<Menu {...menuTestProps} />);
+    const menu = render(<Menu />);
 
     expect(menu.queryByTestId('menu-dropdown')).toBeTruthy();
   });
 
-  it('should call `onSelectOption` once an option is selected', async () => {
-    const spyFn = jest.fn();
-    const menu = render(<Menu {...menuTestProps} onSelectOption={spyFn} />);
+  it('should call `addNode` once an option is selected', async () => {
+    const menu = render(<Menu />);
 
-    const testOption = testOptions[0].type;
+    const testOption: TNodeType = 'query';
     const dropdown = menu.getByTestId('menu-dropdown');
 
     await userEvent.selectOptions(dropdown, testOption);
 
-    expect(spyFn).toBeCalledTimes(1);
-    expect(spyFn).toBeCalledWith(testOption);
+    expect(addNodeMock).toBeCalledTimes(1);
+    expect(addNodeMock).toBeCalledWith(testOption);
   });
 });

@@ -3,3 +3,7 @@
   height: 100vh;
   overflow: hidden;
 }
+
+.react-flow__node {
+  border-color: #9b4dca !important;
+}

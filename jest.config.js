@@ -2,6 +2,7 @@
 const { resolve } = require('path');
 
 module.exports = {
+  setupFilesAfterEnv: [resolve('./jest.setup.js')],
   preset: 'ts-jest',
   rootDir: './src',
   testEnvironment: 'jsdom',
