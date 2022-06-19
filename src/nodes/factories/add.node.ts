@@ -9,8 +9,7 @@ export function createAddNode(): INodeDescriptor {
     connections: [],
     title: ADD_NODE_TITLE,
     type: 'add',
-    process: () => {
-      /* noop */
-    },
+    inConnectors: ['valueA', 'valueB'],
+    outConnectors: ['result'],
   };
 }

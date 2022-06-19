@@ -1,10 +1,13 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { Node, TNodeProps } from './Node';
+import { BaseNode } from './BaseNode';
+import { TNodeProps } from './types';
 
 const nodeProps: TNodeProps = {
+  connections: [],
   id: 'test-id',
   title: 'test-title',
+  type: 'add',
   removeNode: () => {
     /* noop */
   },
@@ -12,7 +15,7 @@ const nodeProps: TNodeProps = {
 
 describe('Node', () => {
   it('should render', () => {
-    const nodeComponent = render(<Node {...nodeProps} />);
+    const nodeComponent = render(<BaseNode {...nodeProps} />);
 
     expect(nodeComponent.queryByTestId('node-root')).toBeTruthy();
   });

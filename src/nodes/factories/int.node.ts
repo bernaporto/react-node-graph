@@ -9,8 +9,6 @@ export function createIntNode(): INodeDescriptor {
     connections: [],
     title: INT_NODE_TITLE,
     type: 'int',
-    process: () => {
-      /* noop */
-    },
+    outConnectors: ['result'],
   };
 }

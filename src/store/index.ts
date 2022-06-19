@@ -1,1 +1,1 @@
-export { NodeProvider, useNodes } from './useNodes';
+export { NodeProvider, useNodes, useNode } from './useNodes';

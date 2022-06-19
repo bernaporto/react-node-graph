@@ -9,8 +9,6 @@ export function createOutputNode(): INodeDescriptor {
     connections: [],
     title: OUTPUT_NODE_TITLE,
     type: 'output',
-    process: () => {
-      /* noop */
-    },
+    inConnectors: ['value'],
   };
 }

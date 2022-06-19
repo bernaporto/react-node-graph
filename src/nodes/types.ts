@@ -1,12 +1,18 @@
 export type TNodeType = 'add' | 'int' | 'output';
 export type TNodeId = string;
 
+export interface INodeConnection {
+  type: 'input' | 'output';
+  target: TNodeId;
+}
+
 export interface INodeDescriptor {
-  connections: TNodeId[];
+  connections: INodeConnection[];
   id: TNodeId;
-  process: VoidFunction;
   title: string;
   type: TNodeType;
+  inConnectors?: string[];
+  outConnectors?: string[];
 }
 
 export type TNodeFactory = () => INodeDescriptor;

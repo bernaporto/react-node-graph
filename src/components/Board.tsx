@@ -1,7 +1,7 @@
 import './Board.css';
 import React, { FC } from 'react';
 import { useNodes } from '../store';
-import { DraggableNode } from './Node';
+import { Node } from './Node';
 
 export const Board: FC = () => {
   const { nodes, removeNode } = useNodes();
@@ -9,12 +9,11 @@ export const Board: FC = () => {
   return (
     <section className="board" data-testid="board-root">
       <div>
-        {nodes.map(({ id, title }) => (
-          <DraggableNode
-            key={id}
-            id={id}
-            title={title}
-            removeNode={() => removeNode(id)}
+        {nodes.map((node) => (
+          <Node
+            key={node.id}
+            removeNode={() => removeNode(node.id)}
+            {...node}
           />
         ))}
       </div>
