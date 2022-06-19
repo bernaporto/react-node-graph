@@ -1,4 +1,4 @@
-export type TNodeType = 'add' | 'output';
+export type TNodeType = 'add' | 'int' | 'output';
 export type TNodeId = string;
 
 export interface INodeDescriptor {
