@@ -28,5 +28,6 @@ function doCreateNode(
       x: window.innerWidth / 2,
       y: window.innerHeight / 2,
     },
+    className: 'custom-node-theme',
   };
 }

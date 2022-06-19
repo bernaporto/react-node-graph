@@ -1,7 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
-import { NodeProvider } from './store';
+import { NodeProvider } from './hooks';
 
 const element = document.createElement('main');
 document.body.append(element);

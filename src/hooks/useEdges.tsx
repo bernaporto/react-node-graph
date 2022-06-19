@@ -5,7 +5,8 @@ export function useEdges() {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   const onConnect = useCallback(
-    (params: Connection) => setEdges((value) => addEdge(params, value)),
+    (params: Connection) =>
+      setEdges((value) => addEdge({ ...params, animated: true }, value)),
     []
   );
 

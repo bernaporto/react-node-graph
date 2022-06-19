@@ -1,7 +1,7 @@
 import './Board.css';
 import React, { FC } from 'react';
 import ReactFlow, { MiniMap, Controls, Background } from 'react-flow-renderer';
-import { useNodes, useEdges } from '../store';
+import { useNodes, useEdges } from '../hooks';
 
 export const Board: FC = () => {
   const { nodes, onNodesChange } = useNodes();

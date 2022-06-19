@@ -4,6 +4,6 @@
   overflow: hidden;
 }
 
-.react-flow__node {
+.custom-node-theme {
   border-color: #9b4dca !important;
 }

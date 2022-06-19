@@ -1,7 +1,7 @@
 import './Menu.css';
 import React, { ChangeEventHandler } from 'react';
 import { capitalize } from '../tools';
-import { useNodes } from '../store';
+import { useNodes } from '../hooks';
 import { nodeType, TNodeType } from '../nodes';
 
 export function Menu() {
