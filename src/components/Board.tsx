@@ -1,7 +1,7 @@
 import './Board.css';
 import React, { FC } from 'react';
 import { useNodes } from '../store';
-import { Node } from './Node';
+import { DraggableNode } from './Node';
 
 export const Board: FC = () => {
   const { nodes, removeNode } = useNodes();
@@ -10,7 +10,7 @@ export const Board: FC = () => {
     <section className="board" data-testid="board-root">
       <div>
         {nodes.map(({ id, title }) => (
-          <Node
+          <DraggableNode
             key={id}
             id={id}
             title={title}

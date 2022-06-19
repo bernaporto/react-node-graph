@@ -1,0 +1,1 @@
+export { makeDraggable } from './makeDragable';
