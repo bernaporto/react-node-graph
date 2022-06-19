@@ -1,1 +1,1 @@
-export { makeDraggable } from './makeDragable';
+export { makeDraggable } from './makeDraggable';
